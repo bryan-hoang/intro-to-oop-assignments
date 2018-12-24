@@ -1,2 +1,2 @@
-# Learning-Java
-A repo dedicated to learning Java for an intro to OOP course (CMPE 212) I'll be taking during the winter term of 2019 as a second year student.
+# CMPE-212-Intro-to-OOP
+My coursework (e.g. labs, assignments and exercises) for a 2nd year Intro to Object Oriented Programming for Engineers course I am taking at Queen's University done in Java.
