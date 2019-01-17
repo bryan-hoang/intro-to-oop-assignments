@@ -12,6 +12,7 @@ import java.util.Scanner;
  */
 public class Assn1_GameOfPig {
 
+
   // A generator object that is seeded using the current time to ensure the randomness in the
   // sequence of pseudorandom numbers used to simulate the dice rolls
   private static final Random GENERATOR = new Random(System.currentTimeMillis());
@@ -24,70 +25,60 @@ public class Assn1_GameOfPig {
   private static final int NUMBER_OF_DICE = 2;
 
   /**
-   * Displays the game instructions and starts the game method.
+   * Displays the game instructions and starts the game method, looping to start new games if the
+   * player wishes to play the game again
    *
    * @param args command line arguments (unused)
    */
   public static void main(String[] args) {
-    printInstructions();
-    playGame();
+    printIntroductionAndRules();
+    do {
+      playGame();
+    } while (!getPlayerDecision("Play"));
+    System.out.println("\nThanks for playing! Have a wonderful day!");
   }
 
   /**
    * Simulates playing the two-dice version of the game of Pig against the computer.
    */
   private static void playGame() {
-    // Indicates if the player wants to play the game again
-    boolean playAgain = true;
-    // Keeps track of the current round
-    int turnCounter;
-    // The player's game sum
-    int playerSum;
-    // The computer's game sum
-    int computerSum;
-    // Each loop represents a full play through of the game
-    while (playAgain) {
-      // Initialize the values for a new game
-      turnCounter = 0;
-      playerSum = 0;
-      computerSum = 0;
+    int turnCounter = 0;  // Keeps track of the current round
+    int playerSum = 0;    // The player's game sum
+    int computerSum = 0;  // The computer's game sum
+    System.out.println(
+        "\nPlayer's sum is: " + playerSum + ", Computer's sum is: " + computerSum + ".\n");
+    // Each loop represents a round during the game.
+    while (true) {
+      // Prompt to begin the round, pausing the game until the player presses enter
+      System.out.println("Press <enter> to start round " + ++turnCounter + ".");
+      PLAYER_INPUT.nextLine();
+      System.out.println("Player's turn:\n");
+      // Simulate the player's turn
+      playerSum = playTurn("Player", playerSum);
       System.out.println(
           "\nPlayer's sum is: " + playerSum + ", Computer's sum is: " + computerSum + ".\n");
-      // Each loop represents a round during the game.
-      while (true) {
-        // Prompt to begin the round, pausing the game until the player presses enter
-        System.out.println("Press <enter> to start round " + ++turnCounter + ".");
-        PLAYER_INPUT.nextLine();
-        System.out.println("Player's turn:\n");
-        // Simulate the player's turn
-        playerSum = playTurn("Player", playerSum);
-        System.out.println(
-            "\nPlayer's sum is: " + playerSum + ", Computer's sum is: " + computerSum + ".\n");
-        // Check if the player has won
-        if (playerSum >= 100) {
-          System.out.println("*****The Player wins!*****\n");
-          break;
-        }
-        System.out.println("Computer's turn:\n");
-        // Simulate the computer's turn
-        computerSum = playTurn("Computer", computerSum);
-        System.out.println(
-            "\nPlayer's sum is: " + playerSum + ", Computer's sum is: " + computerSum + ".\n");
-        // Check if the computer has won
-        if (computerSum >= 100) {
-          System.out.println("*****The Computer wins!*****\n");
-          break;
-        }
-        // End of round
+      // Check if the player has won
+      if (playerSum >= 100) {
+        System.out.println("*****The Player wins!*****\n");
+        break;
       }
-      // Prompt the user to play again
-      playAgain = getPlayerDecision("Play");
+      System.out.println("Computer's turn:\n");
+      // Simulate the computer's turn
+      computerSum = playTurn("Computer", computerSum);
+      System.out.println(
+          "\nPlayer's sum is: " + playerSum + ", Computer's sum is: " + computerSum + ".\n");
+      // Check if the computer has won
+      if (computerSum >= 100) {
+        System.out.println("*****The Computer wins!*****\n");
+        break;
+      }
+      // End of round
     }
-    System.out.println("\nThanks for playing! Have a wonderful day!");
+    // End of game
   }
 
   /**
-   * Simulates either the player's or computer's turn
+   * Simulate's either the player's or computer's turn
    *
    * @param competitor the name of the game participant, either "Player" or "Computer"
    * @param gameSum    the game sum of the competitor
@@ -154,7 +145,7 @@ public class Assn1_GameOfPig {
   }
 
   /**
-   * Handles the event when both dice are equal to one.
+   * Handles the situation when both dice are equal to one.
    *
    * @param competitor the name of a game participant, either "Player" or "Computer"
    * @param dice       the rolled dice
@@ -172,7 +163,7 @@ public class Assn1_GameOfPig {
   }
 
   /**
-   * Handles the event when both dice match, other than ones.
+   * Handles the situation when both dice match, other than ones.
    *
    * @param competitor the name of the game participant, either "Player" or "Computer"
    * @param dice       the rolled dice
@@ -212,9 +203,9 @@ public class Assn1_GameOfPig {
    * input. Makes sure the player types the correct input by prompting them again after invalid
    * inputs.
    *
-   * @param prompt the prompt asking the player if they want to "Roll" or "Play" again
+   * @param prompt the prompt referring if the player wants to "Roll" or "Play" again
    *
-   * @return true if the player wants to roll/play again, false otherwise
+   * @return true if the player wants to roll or play again, false otherwise
    */
   private static boolean getPlayerDecision(String prompt) {
     String playerDecision;
@@ -242,7 +233,7 @@ public class Assn1_GameOfPig {
    * @return true if the computer wants to roll again, false otherwise
    */
   private static boolean getComputerDecision(int computerSum, int turnSum) {
-    // The computer wants to roll again if it hasn't won yet and if it's turn score
+    // The computer wants to roll again if it hasn't won yet and if its turn score
     // is below 40. Otherwise don't roll again.
     return (computerSum + turnSum) < 100 && turnSum < 40;
   }
@@ -250,7 +241,7 @@ public class Assn1_GameOfPig {
   /**
    * Prints the rules of the game to the console.
    */
-  private static void printInstructions() {
+  private static void printIntroductionAndRules() {
     System.out.println("Hello player, and welcome to the 2 dice version of the game of Pig!\n" +
         "You will be competing against the computer.\n" +
         "Here are the rules:\n" +
