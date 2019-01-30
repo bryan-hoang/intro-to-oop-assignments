@@ -8,16 +8,18 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- * A class that wraps methods which allow someone to play the
- * two dice version of the game of Pig against the computer.
+ * A class that wraps methods which allow a person to play the two dice version of the game of Pig
+ * against the computer.
  */
 public class Assn1_GameOfPig {
 
-  private static final Random GENERATOR = new Random(System.currentTimeMillis());
+  private static final Random NUM_GENERATOR = new Random(System.currentTimeMillis());
   private static final Scanner PLAYER_INPUT = new Scanner(System.in);
+  // Used to translate a rolled number into a word
   private static final String[] NUM_NAMES = {"", "one", "two", "three", "four", "five", "six"};
-  private static final int NUMBER_OF_DICE = 2;
-  // Allows you to change the max score of the game
+  private static final int NUM_DICE = 2;
+  private static final int NUM_SIDES = 6;
+  // Allows someone to change the max score of the game
   private static final int MAX_SUM = 100;
 
   /**
@@ -35,12 +37,15 @@ public class Assn1_GameOfPig {
   }
 
   /**
-   * Simulates playing the two-dice version of the game of Pig against the computer.
+   * Simulates playing the two-dice version of the game of Pig against the computer by looping
+   * through turns, ending once either competitor scores above the maximum
    */
   private static void playGame() {
-    int playerSum = 0;
-    int computerSum = 0;
+    int playerSum = 0;    // The player's total sum during the game
+    int computerSum = 0;  // The computer's total sum during the game
+    // 1 loop = 1 turn
     for (int turn = 1; playerSum < MAX_SUM && computerSum < MAX_SUM; turn++) {
+      // A round starts on every odd turn with the player going first
       if (turn % 2 == 1) {
         System.out.println("\nPress <enter> to start round " + (turn + 1) / 2 + ".");
         PLAYER_INPUT.nextLine();
@@ -53,24 +58,27 @@ public class Assn1_GameOfPig {
       System.out.println(
           "\nPlayer's sum is: " + playerSum + ", Computer's sum is: " + computerSum + ".");
     }
+    // playerSum indicates who won due to the exit condition of the for loop
     if (playerSum >= MAX_SUM) {
-      System.out.println("*****The Player wins!*****\n");
+      System.out.println("\n*****The Player wins!*****\n");
     } else {
-      System.out.println("*****The Computer wins!*****\n");
+      System.out.println("\n*****The Computer wins!*****\n");
     }
   }
 
   /**
-   * Simulate's either the player's or computer's turn
+   * Simulate's either the player's or computer's turn by looping through dice rolls and handling
+   * the appropriate conditions.
    *
    * @param competitor the name of the game participant, either "Player" or "Computer"
-   * @param gameSum    the game sum of the competitor
+   * @param gameSum    the competitor's game sum
    *
    * @return the turn sum
    */
   private static int playTurn(String competitor, int gameSum) {
-    int[] dice = new int[NUMBER_OF_DICE];
-    int turnSum = 0;
+    int[] dice = new int[NUM_DICE]; // The dice to roll
+    int turnSum = 0;                      // The competitor's potential turn sum
+    // 1 loop = 1 dice roll
     do {
       rollDice(dice);
       System.out.println(competitor + " rolled " + NUM_NAMES[dice[0]] + " + " + NUM_NAMES[dice[1]]);
@@ -95,7 +103,7 @@ public class Assn1_GameOfPig {
             (gameSum + turnSum));
       }
       // Short circuit the condition, asking the  player or computer to roll again when none of the
-      // special conditions apply
+      // special conditions apply. Removes the need for a "rollAgain" boolean variable.
     } while (dice[0] == dice[1] || getDecision(competitor, gameSum, turnSum));
     return gameSum + turnSum;
   }
@@ -106,8 +114,8 @@ public class Assn1_GameOfPig {
    * @param dice the dice that need to be rolled
    */
   private static void rollDice(int[] dice) {
-    dice[0] = GENERATOR.nextInt(6) + 1;
-    dice[1] = GENERATOR.nextInt(6) + 1;
+    dice[0] = NUM_GENERATOR.nextInt(NUM_SIDES) + 1;
+    dice[1] = NUM_GENERATOR.nextInt(NUM_SIDES) + 1;
   }
 
   /**
@@ -160,8 +168,6 @@ public class Assn1_GameOfPig {
    * @return true if the computer wants to roll again, false otherwise
    */
   private static boolean getComputerDecision(int computerSum, int turnSum) {
-    // The computer wants to roll again if it hasn't won yet and if its turn score
-    // is below 40. Otherwise don't roll again.
     return (computerSum + turnSum) < MAX_SUM && turnSum < 40;
   }
 
@@ -169,7 +175,8 @@ public class Assn1_GameOfPig {
    * Prints the intro and rules of the game to the console.
    */
   private static void printIntroductionAndRules() {
-    System.out.println("\nHello player, and welcome to the 2 dice version of the game of Pig!\n" +
+    System.out.println("\nHello player, and welcome to the 2 six-sided dice version of the " +
+        "game of Pig!\n" +
         "You will be competing against the computer.\n\n" +
         "Here are the rules:\n\n" +
         "\t- The first player to accumulate a score of " + MAX_SUM + " or more wins.\n" +
@@ -181,7 +188,7 @@ public class Assn1_GameOfPig {
         "\t\t- If one dice is one, then your turn is over and your turn score is set to zero.\n" +
         "\t\t- If both dice match (\"doubles\"), other than ones, then you gain twice the sum of" +
         " the dice, and you must roll again.\n" +
-        "\t\t For example if you rolled two fours, you would gain 16 and then have to roll again"
+        "\t\t  For example if you rolled two fours, you would gain 16 and then have to roll again"
         + ".\n" +
         "\t\t- For any other dice combination, you just add the dice total to your turn score and" +
         " you have the choice of rolling again.\n" +
