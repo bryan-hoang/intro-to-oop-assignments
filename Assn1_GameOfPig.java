@@ -128,8 +128,6 @@ public class Assn1_GameOfPig {
    * @return true if the competitor wants to roll again, false otherwise
    */
   private static boolean getDecision(String competitor, int gameSum, int turnSum) {
-    // .equals ensures each string being compared has the same value, ignoring if they are
-    // referring to the same String object
     if (competitor.equals("Player")) {
       return getPlayerDecision("Roll");
     }
