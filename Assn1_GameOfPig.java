@@ -77,7 +77,7 @@ public class Assn1_GameOfPig {
    */
   private static int playTurn(String competitor, int gameSum) {
     int[] dice = new int[NUM_DICE]; // The dice to roll
-    int turnSum = 0;                      // The competitor's potential turn sum
+    int turnSum = 0;                // The competitor's potential turn sum
     // 1 loop = 1 dice roll
     do {
       rollDice(dice);
