@@ -17,7 +17,6 @@ public class GameOfPig {
   private static final Scanner PLAYER_INPUT = new Scanner(System.in);
   private static final int NUM_DICE = 2;
   private static final int NUM_SIDES = 6;
-  // Allows someone to change the max score of the game
   private static final int MAX_SUM = 100;
 
   /**
@@ -39,8 +38,8 @@ public class GameOfPig {
    * through turns, ending once either competitor scores above the maximum.
    */
   private static void playGame() {
-    int playerSum = 0;    // The player's total sum during the game
-    int computerSum = 0;  // The computer's total sum during the game
+    int playerSum = 0;
+    int computerSum = 0;
     int turn = 1;
     while (playerSum < MAX_SUM && computerSum < MAX_SUM) {
       // A round starts on every odd turn with the player going first
