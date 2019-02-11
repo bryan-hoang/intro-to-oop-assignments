@@ -28,7 +28,6 @@ class MotorDataAnalyzer {
    */
   public static void main(String[] args) {
     System.out.println("Analyzing the logged motor data.");
-    // TODO: Ask if this chain of method calls is stylistically okay
     writeReports(analyzeMotorData(getMotorData()));
     System.out.println("The analysis of the motor data has successfully completed.\r\n"
         + "The results have been written to the Motor(num).csv files");
