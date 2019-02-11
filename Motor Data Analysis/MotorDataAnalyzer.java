@@ -1,8 +1,5 @@
 /*
  * Author: Bryan Hoang
- * NetID: 16bch1
- * Student Number: 20053722
- * 2019/2/8
  *
  * The code has been formatted to conform with the Google Java Style Guide
  */
