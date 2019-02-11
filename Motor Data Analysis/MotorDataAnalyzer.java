@@ -21,7 +21,7 @@ class MotorDataAnalyzer {
   private static final int NUM_LINES = 1000;
 
   /**
-   * Calls methods to read the data, analyze the data, and write the data as well as displaying the
+   * Calls methods to get the data, analyze the data, and write the data as well as displaying the
    * status of the program in the terminal.
    *
    * @param args The command line arguments (Unused).
@@ -52,7 +52,7 @@ class MotorDataAnalyzer {
 
   /**
    * Reads the motor data from the file line by line by removing leading and trailing whitespace,
-   * and splitting up the line into anv array of strings containing the comma separated values.
+   * and splitting up the line into an array of strings containing the comma separated values.
    *
    * @param reader    The file reader.
    * @param motorData The destination of the data to be read into.
@@ -71,7 +71,7 @@ class MotorDataAnalyzer {
   }
 
   /**
-   * Parses each of the comma separated values into a double and stores it into an array.
+   * Parses each of the comma separated values into a double and stores it in an array.
    *
    * @param line      An array of strings representing each comma separated value.
    * @param lineNum   The current line number in the file.
@@ -160,7 +160,7 @@ class MotorDataAnalyzer {
   }
 
   /**
-   * Checks if the motor is turning off.
+   * Checks if a motor is turning off.
    *
    * @param motorOn The state of the motor.
    * @param current The current value of the motor.
@@ -174,7 +174,7 @@ class MotorDataAnalyzer {
   /**
    * Computes the average current during a motor's period of activity.
    *
-   * @param motorCurrents The current values for a particular motor.
+   * @param motorCurrents The current values for the particular motor.
    * @param startTime     The time when the current pulse starts.
    * @param endTime       The time when the current pulse ends.
    *
@@ -190,7 +190,7 @@ class MotorDataAnalyzer {
   }
 
   /**
-   * Checks if no current activity was processed for the motor.
+   * Checks if no current activity was processed for a motor.
    *
    * @param analyzedData The analyzed motor data.
    * @param motorNum     The motor of interest.
