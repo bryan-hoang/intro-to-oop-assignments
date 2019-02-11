@@ -43,7 +43,6 @@ class MotorDataAnalyzer {
    * @return A 2D array of doubles containing the data from the file.
    */
   private static double[][] getMotorData() {
-    // TODO: Ask if I should read in redundant time values from file
     double[][] motorData = new double[NUM_MOTORS][NUM_LINES];
     Path file = Paths.get("Logger.csv");
     try (var reader = Files.newBufferedReader(file)) {
