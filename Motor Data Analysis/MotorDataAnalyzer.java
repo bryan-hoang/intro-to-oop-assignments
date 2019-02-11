@@ -18,7 +18,7 @@ import java.util.Arrays;
  * This class reads data from the Logger.csv file and outputs .cvs files for each
  * motor in Logger.csv.
  */
-class MotorDataAnalyzer{
+class MotorDataAnalyzer {
 
   private static final int NUM_MOTORS = 7;
   private static final int NUM_LINES = 1000;
