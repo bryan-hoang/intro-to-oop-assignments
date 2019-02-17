@@ -16,6 +16,7 @@ public class GameOfPig {
   private static final Random NUM_GENERATOR = new Random(System.currentTimeMillis());
   private static final Scanner PLAYER_INPUT = new Scanner(System.in);
   private static final int NUM_DICE = 2;
+  // Can modify the max score for the game and number of sides of the dice
   private static final int NUM_SIDES = 6;
   private static final int MAX_SUM = 100;
 
@@ -41,24 +42,45 @@ public class GameOfPig {
     int playerSum = 0;
     int computerSum = 0;
     int turn = 1;
+    playerSum = playTurns(playerSum, computerSum, turn);
+    printWinner(playerSum);
+  }
+
+  /**
+   * Carries out the main portion of the game through the turns between the Player and the Computer.
+   *
+   * @param playerSum   The player's game sum.
+   * @param computerSum The computer's game sum.
+   * @param turn        The starting turn number.
+   *
+   * @return The player's final game sum which will be used to decide who won.
+   */
+  private static int playTurns(int playerSum, int computerSum, int turn) {
     while (playerSum < MAX_SUM && computerSum < MAX_SUM) {
       // A round starts on every odd turn with the player going first
+      askToStartNextTurn(turn);
       if (turn++ % 2 == 1) {
-        System.out.println("\nPress <enter> to start round " + (turn + 1) / 2 + ".");
-        PLAYER_INPUT.nextLine();
         System.out.println("Player's turn:\n");
         playerSum += playTurn("Player", playerSum);
       } else {
         System.out.println("\nComputer's turn:\n");
         computerSum += playTurn("Computer", computerSum);
       }
-      reportSums(playerSum, computerSum);
+      reportGameSums(playerSum, computerSum);
     }
-    if (playerSum >= MAX_SUM) {
-      System.out.println("\n*****The Player wins!*****\n");
-    } else {
-      System.out.println("\n*****The Computer wins!*****\n");
-    }
+    return playerSum;
+  }
+
+  /**
+   * Asks the player to start the next turn.
+   *
+   * @param turn The current turn number.
+   */
+  private static void askToStartNextTurn(int turn) {
+    System.out.println(
+        "\nPress <enter> to start round " + (turn + 1) / 2 + ", turn " + turn + " (" +
+            (turn % 2 == 1 ? "Player's" : "Computer's") + " turn).");
+    PLAYER_INPUT.nextLine();
   }
 
   /**
@@ -75,14 +97,12 @@ public class GameOfPig {
     int turnSum = 0;
     int rollSum;
     do {
-      rollDice(dice);
-      reportRoll(competitor, dice);
-      rollSum = checkDice(dice);
-      if (rollSum == 0) {
+      rollSum = getRollSum(competitor, dice);
+      if (isTurnOver(rollSum)) {
         return 0;
       }
       turnSum += rollSum;
-      reportSums(competitor, turnSum, gameSum);
+      reportTurnAndGameSums(competitor, turnSum, gameSum);
       if (dice[0] == dice[1]) {
         System.out.println(competitor + " must roll again!");
       }
@@ -90,6 +110,31 @@ public class GameOfPig {
       // the special conditions apply.
     } while (dice[0] == dice[1] || getDecision(competitor, gameSum, turnSum));
     return turnSum;
+  }
+
+  /**
+   * Retrieves the roll sum after rolling the dice.
+   *
+   * @param competitor The name of the game participant, either "Player" or "Computer".
+   * @param dice       The dice to roll.
+   *
+   * @return The roll sum.
+   */
+  private static int getRollSum(String competitor, int[] dice) {
+    rollDice(dice);
+    reportRoll(competitor, dice);
+    return adjustRollSum(dice);
+  }
+
+  /**
+   * Checks if the competitor's turn is over due to rolling a single 1.
+   *
+   * @param rollSum The competitor's roll sum.
+   *
+   * @return True if the competitor's roll sum is 0, false otherwise.
+   */
+  private static boolean isTurnOver(int rollSum) {
+    return rollSum == 0;
   }
 
   /**
@@ -103,13 +148,14 @@ public class GameOfPig {
   }
 
   /**
-   * Checks to see if both dice are double ones, doubles, or 1 of them is a one.
+   * Adjusts and returns the appropriate roll sum after checking and displaying if both dice are
+   * double ones, doubles, or 1 of them is a one.
    *
    * @param dice The rolled dice.
    *
-   * @return The roll sum.
+   * @return The adjusted roll sum.
    */
-  private static int checkDice(int[] dice) {
+  private static int adjustRollSum(int[] dice) {
     if (dice[0] + dice[1] == 2) {
       System.out.println("DOUBLE ONES!");
       return 25;
@@ -139,7 +185,8 @@ public class GameOfPig {
         return false;
       }
       return true;
-    } else if (!getComputerDecision(gameSum, turnSum)) {
+    }
+    if (!getComputerDecision(gameSum, turnSum)) {
       System.out.println("The " + competitor + " has decided to end their turn.");
       return false;
     }
@@ -151,7 +198,7 @@ public class GameOfPig {
    * input. Makes sure the player types the correct input by prompting them again after invalid
    * inputs.
    *
-   * @param prompt The action to repeat, referring to if the player wants to "Roll" or "Play" again
+   * @param prompt The action to repeat, referring to if the player wants to "Roll" or "Play" again.
    *
    * @return True if the player wants to roll or play again, false otherwise.
    */
@@ -161,7 +208,7 @@ public class GameOfPig {
       System.out.print(prompt + " again? (Enter 'y' or 'n'): ");
       playerDecision = PLAYER_INPUT.nextLine();
       if (!playerDecision.equals("y") && !playerDecision.equals("n")) {
-        System.out.print(playerDecision + " is not 'y' nor 'n'. Please try again - ");
+        System.out.println(playerDecision + " is not 'y' nor 'n'. Please try again.");
       }
     } while (!playerDecision.equals("y") && !playerDecision.equals("n"));
     return playerDecision.equals("y");
@@ -209,7 +256,7 @@ public class GameOfPig {
    * @param playerSum   The player's game sum.
    * @param computerSum The computer's game sum.
    */
-  private static void reportSums(int playerSum, int computerSum) {
+  private static void reportGameSums(int playerSum, int computerSum) {
     System.out.println("\nPlayer's sum is: " + playerSum +
         ", Computer's sum is: " + computerSum + ".");
   }
@@ -221,9 +268,22 @@ public class GameOfPig {
    * @param turnSum    The competitor's current turn sum.
    * @param gameSum    The competitor's game sum.
    */
-  private static void reportSums(String competitor, int turnSum, int gameSum) {
+  private static void reportTurnAndGameSums(String competitor, int turnSum, int gameSum) {
     System.out.println(competitor + "\'s turn sum is: " + turnSum +
         " and game sum would be: " + (gameSum + turnSum) + ".");
+  }
+
+  /**
+   * Displays the winner of the game.
+   *
+   * @param playerSum The player's game sum.
+   */
+  private static void printWinner(int playerSum) {
+    if (playerSum >= MAX_SUM) {
+      System.out.println("\n*****The Player wins!*****\n");
+    } else {
+      System.out.println("\n*****The Computer wins!*****\n");
+    }
   }
 
   /**
@@ -251,4 +311,5 @@ public class GameOfPig {
         + " turn sum is added to your accumulated score.\n\n" +
         "Good luck!");
   }
+
 }
